@@ -18,11 +18,10 @@ namespace HelloWorld
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
-        }
-
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+            var host = new WebHostBuilder()
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
                 .UseMetrics()
                 .ConfigureHealthWithDefaults(
                     builder =>
@@ -30,6 +29,10 @@ namespace HelloWorld
                         builder.HealthChecks.AddCheck("Franks Check", () => new ValueTask<HealthCheckResult>(HealthCheckResult.Healthy("App is Running correctly")));
                     })
                 .UseHealthEndpoints()
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .Build();
+
+            host.Run();
+        }
     }
 }
