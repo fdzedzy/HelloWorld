@@ -5,14 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HelloWorld.Models;
 
-
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace HelloWorld.Controllers
 {
     [Route("api/[controller]")]
     public class CounterController : Controller
-    {
+    {        
         // GET: api/<controller>
         [HttpGet]
         public IActionResult Get()

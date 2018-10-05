@@ -13,10 +13,22 @@
     <br />
     <button onclick="adjustCounter(this)" id="incrementCounter">Increment Counter</button>
     <button onclick="adjustCounter(this)" id="decrementCounter">Decrement Counter</button>
+    <br />
 
+    <script src="lib/signalr/dist/browser/signalr.js"></script>
     <script>
+        var connection = new signalR.HubConnectionBuilder().withUrl("/counterHub").build();
+
+        connection.start().catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        connection.on("ReceiveMessage", function (counter) {
+            document.getElementById('counterValue').innerHTML = "The current counter value is: " + counter;
+        });
+
         var counterApi = document.location.origin + "/api/Counter";
-        
+
         function getCounter() {
             var Http = new XMLHttpRequest();
             Http.onreadystatechange = function () {
@@ -38,6 +50,10 @@
             Http.open("POST", counterApi, true);
             Http.setRequestHeader("Content-type", "application/json");
             Http.send(JSON.stringify(body));
+
+            connection.invoke("SendCounter").catch(function (err) {
+                return console.error(err.toString());
+            });
         }
 
     </script>

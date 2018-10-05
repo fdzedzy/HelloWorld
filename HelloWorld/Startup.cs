@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using HelloWorld.Hubs;
 
 namespace HelloWorld
 {
@@ -28,6 +30,7 @@ namespace HelloWorld
         {
             services.AddMvc();
             services.AddMetrics();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,10 +48,12 @@ namespace HelloWorld
                 app.UseHsts();
             }
 
-
-
             app.UseHttpsRedirection();
             app.UseFileServer();
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<CounterHub>("/counterHub");
+            });
             app.UseMvc();
         }
     }
