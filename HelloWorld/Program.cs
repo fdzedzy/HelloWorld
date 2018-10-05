@@ -11,6 +11,7 @@ using App.Metrics;
 using App.Metrics.AspNetCore;
 using App.Metrics.Health;
 using App.Metrics.AspNetCore.Health;
+using HelloWorld.Models;
 
 namespace HelloWorld
 {
@@ -18,6 +19,7 @@ namespace HelloWorld
     {
         public static void Main(string[] args)
         {
+
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())

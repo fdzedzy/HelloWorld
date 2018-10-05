@@ -4,10 +4,42 @@
     <meta charset="utf-8" />
     <title>Frank's Hello World Site</title>
 </head>
-<body>
+<body onload="getCounter()">
     <h1>Frank's Hello World Site</h1>
-    <a href="/api/values">Values API Endpoint</a>
-    <a href="/health">Health Endpoint</a>
-    <a href="/metrics-text">Metrics Endpoint</a>
+    <a href="/api/values">Values API Endpoint</a><br />
+    <a href="/health">Health Endpoint</a><br />
+    <a href="/metrics-text">Metrics Endpoint</a><br />
+    <p id="counterValue"></p>
+    <br />
+    <button onclick="adjustCounter(this)" id="incrementCounter">Increment Counter</button>
+    <button onclick="adjustCounter(this)" id="decrementCounter">Decrement Counter</button>
+
+    <script>
+        var counterApi = document.location.origin + "/api/Counter";
+        
+        function getCounter() {
+            var Http = new XMLHttpRequest();
+            Http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var data = JSON.parse(this.responseText);
+                    console.log(data.counterValue);
+                    console.log(this.responseText);
+                    document.getElementById('counterValue').innerHTML = "The current counter value is: " + data.counterValue;
+                }
+            }
+            Http.open("GET", counterApi, true);
+            Http.send();
+        }
+
+        function adjustCounter(source) {
+            var body = (source.id == "decrementCounter" ? "decrease" : "increase");
+
+            var Http = new XMLHttpRequest();
+            Http.open("POST", counterApi, true);
+            Http.setRequestHeader("Content-type", "application/json");
+            Http.send(JSON.stringify(body));
+        }
+
+    </script>
 </body>
 </html>

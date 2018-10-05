@@ -45,6 +45,8 @@ namespace HelloWorld
                 app.UseHsts();
             }
 
+
+
             app.UseHttpsRedirection();
             app.UseFileServer();
             app.UseMvc();
